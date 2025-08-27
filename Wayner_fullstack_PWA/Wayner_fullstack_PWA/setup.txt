@@ -1,0 +1,18 @@
+# Setup инструкция (Ubuntu VPS үчүн)
+sudo apt update
+sudo apt install -y nodejs npm unzip
+
+# Архивди көчүрүп ачуу
+unzip Wayner_fullstack_PWA.zip -d wayner-app
+cd wayner-app/server
+
+# Орнотуу
+npm install
+npm run migrate   # база жана админ аккаунт түзүлөт
+npm run start     # серверди баштоо (http://SERVER_IP:8080)
+
+# Фондук режимде иштетүү үчүн (опция)
+sudo npm install -g pm2
+pm2 start src/server.js --name wayner
+pm2 save
+pm2 startup
