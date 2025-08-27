@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wayner Work Reports</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <h1>Wayner Reports</h1>
+  <form id="reportForm">
+    <input type="text" id="user" placeholder="Your Name" required>
+    <textarea id="report" placeholder="Your report..." required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+  <ul id="reports"></ul>
+
+  <script>
+    async function loadReports() {
+      let res = await fetch("/reports");
+      let data = await res.json();
+      document.getElementById("reports").innerHTML = data.map(r => `<li>${r.user}: ${r.report}</li>`).join("");
+    }
+
+    document.getElementById("reportForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      let user = document.getElementById("user").value;
+      let report = document.getElementById("report").value;
+      await fetch("/reports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user, report })
+      });
+      loadReports();
+    });
+
+    loadReports();
+  </script>
+</body>
+</html>
